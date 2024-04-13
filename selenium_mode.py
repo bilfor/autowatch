@@ -27,9 +27,9 @@ def find_stream_url(page_url):
         # Search for the desired link
         for link in links:
             url = link.get('src', '')
-            if '1stream.eu' in url:
+            if not 'https:' in url:
                 url = 'https:' + url 
-                return url
+            return url
     else:
         print("Failed to retrieve the web page. Status code:", response.status_code)
 
@@ -41,7 +41,7 @@ def find_streams_in_urls(url_list):
     return results
 
 # Path to the directory containing geckodriver
-geckodriver_dir = '.'
+geckodriver_dir = '/home/billy/working/autowatch'
 
 # Add geckodriver directory to the system PATH
 os.environ['PATH'] += os.pathsep + geckodriver_dir
@@ -52,10 +52,10 @@ url = sys.argv[1]
 stream_url = find_stream_url(url)
 
 # Path to Firefox binary
-firefox_binary_path = '/usr/bin/firefox'
+firefox_binary_path = '/home/billy/Downloads/firefox/firefox'
 
 # Path to Firefox profile with addons
-firefox_profile_path = '/home/will/.mozilla/firefox/ev08el9k.default-release'
+firefox_profile_path = '/home/billy/.mozilla/firefox/firefox-profile/ev08el9k.default-release'
 
 # Set Firefox options
 firefox_options = FirefoxOptions()
@@ -75,7 +75,8 @@ driver.get(stream_url)
 # Wait for the page to load
 time.sleep(5)
 
-video_element = driver.find_element(By.ID, "video-player")
+# video_element = driver.find_element(By.ID, "video-player")
+video_element = driver.find_element(By.ID, "volokit_player")
 
 # Click on the video element
 actions = ActionChains(driver)
