@@ -8,6 +8,37 @@ from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 import time
 import sys
 import os
+import requests
+from bs4 import BeautifulSoup
+
+def find_stream_url(page_url):
+    # Send a GET request to the URL
+    print(page_url)
+    response = requests.get(page_url)
+    
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Parse HTML using BeautifulSoup
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        # Find all anchor tags in the HTML
+        links = soup.find_all('iframe')
+        
+        # Search for the desired link
+        for link in links:
+            url = link.get('src', '')
+            if '1stream.eu' in url:
+                url = 'https:' + url 
+                return url
+    else:
+        print("Failed to retrieve the web page. Status code:", response.status_code)
+
+def find_streams_in_urls(url_list):
+    results = {}
+    for url in url_list:
+        stream_url = find_stream_url(url)
+        results[url] = stream_url
+    return results
 
 # Path to the directory containing geckodriver
 geckodriver_dir = '.'
@@ -17,6 +48,8 @@ os.environ['PATH'] += os.pathsep + geckodriver_dir
 
 # URL of the webpage with the video
 url = sys.argv[1]
+
+stream_url = find_stream_url(url)
 
 # Path to Firefox binary
 firefox_binary_path = '/usr/bin/firefox'
@@ -37,7 +70,7 @@ profile.set_preference("browser.startup.fullscreen", True)
 driver = webdriver.Firefox(options=firefox_options)
 
 # Open the webpage
-driver.get(url)
+driver.get(stream_url)
 
 # Wait for the page to load
 time.sleep(5)

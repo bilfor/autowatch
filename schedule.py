@@ -1,6 +1,8 @@
 from datetime import datetime
 import csv
 import sys
+import requests
+from bs4 import BeautifulSoup
 
 def extract_date_time_teams(csv_file_path):
     # Initialize an empty list to store the concatenated first two columns
@@ -32,8 +34,12 @@ def make_urls(teams):
 
     return urls
 
-def make_open_commands(urls):
-    return ['export DISPLAY=:0 && firefox --new-window ' + url for url in urls]
+def make_open_commands(urls, mode):
+    if mode == 'fullscreen':
+        return ['python selenium_mode.py ' + url for url in urls]
+
+    elif mode == 'no-fullscreen':
+        return ['export DISPLAY=:0 && firefox --new-window ' + url for url in urls]
 
 def make_crontimes(times):
     crons = []
@@ -124,8 +130,9 @@ def fix_day_rollover(cron_times):
     return adjusted_cron_times
 
 times, teams = extract_date_time_teams(sys.argv[1])
-urls = make_urls(teams)
-open_commands = make_open_commands(urls)
+volo_urls = make_urls(teams)
+#onestream_urls = find_streams_in_urls(volo_urls)
+open_commands = make_open_commands(volo_urls, 'fullscreen')
 et_start_times = make_crontimes(times)
 ct_start_times = modify_hour(et_start_times, 'subtract', 1)
 ct_end_times = modify_hour(ct_start_times, 'add', 4)
