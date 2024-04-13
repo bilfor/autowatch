@@ -28,10 +28,10 @@ def crawl_sitemap_for_urls(sitemap_url, contains_string):
     return filtered_urls
 
 # Example usage
-sitemap_url = "https://thestreameast.to/sitemap.xml"  # Replace with the actual sitemap URL
-contains_string = "baltimore-orioles"  # Replace with the substring you're looking for in the URLs
-
-filtered_urls = crawl_sitemap_for_urls(sitemap_url, contains_string)
-for url in filtered_urls:
-    print(url)
+#sitemap_url = "https://volokit2.com/lives-sitemap.xml"  # Replace with the actual sitemap URL
+#contains_string = "baltimore-orioles"  # Replace with the substring you're looking for in the URLs
+#
+#filtered_urls = crawl_sitemap_for_urls(sitemap_url, contains_string)
+#for url in filtered_urls:
+#    print(url)
 
