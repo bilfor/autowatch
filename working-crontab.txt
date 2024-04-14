@@ -1,0 +1,7 @@
+DISPLAY=:0
+SHELL=/bin/bash
+PATH=:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
+
+
+* * * * * echo 'SEXECUTING' >> /home/billy/cronlog.txt
+#* * * * * /home/billy/working/autowatch/selenium_mode.py 'https://volokit2.com/lives/milwaukee-brewers-at-baltimore-orioles-home' >> /home/billy/cronlog.txt 2>&1

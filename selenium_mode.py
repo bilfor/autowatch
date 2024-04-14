@@ -1,3 +1,5 @@
+#!/home/billy/working/autowatch/venv/bin/python
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -29,7 +31,7 @@ def find_stream_url(page_url):
             url = link.get('src', '')
             if not 'https:' in url:
                 url = 'https:' + url 
-            return url
+            return url # this only works rn because the first iframe it finds happens ot be the one we want
     else:
         print("Failed to retrieve the web page. Status code:", response.status_code)
 
@@ -44,7 +46,7 @@ def find_streams_in_urls(url_list):
 geckodriver_dir = '/home/billy/working/autowatch'
 
 # Add geckodriver directory to the system PATH
-os.environ['PATH'] += os.pathsep + geckodriver_dir
+#os.environ['PATH'] += os.pathsep + geckodriver_dir
 
 # URL of the webpage with the video
 url = sys.argv[1]
@@ -76,7 +78,10 @@ driver.get(stream_url)
 time.sleep(5)
 
 # video_element = driver.find_element(By.ID, "video-player")
-video_element = driver.find_element(By.ID, "volokit_player")
+##### this works for volokit: video_element = driver.find_element(By.ID, "volokit_player")
+#video_element = driver.find_element(By.XPATH, '//*[@id="volokit_player" or @class="playervid"]')
+#######this works for 1stream: video_element = driver.find_element(By.ID, "video-player")
+video_element = driver.find_element(By.XPATH, '//*[@id="volokit_player" or @id="video-player"]')
 
 # Click on the video element
 actions = ActionChains(driver)

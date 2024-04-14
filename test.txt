@@ -1,1 +1,2 @@
-* * * * * PATH=/home/billy/Downloads/firefox:$PATH /home/billy/working/autowatch/venv/bin/python /home/billy/working/autowatch/selenium_mode.py 'https://volokit2.com/lives/minnesota-twins-at-detroit-tigers-game-2-home/' >> /home/billy/cronlog.txt 2>&1
+* * * * * echo 'EXECUTING' >> /home/billy/cronlog.txt
+* * * * * /home/billy/working/autowatch/selenium_mode.py 'https://volokit2.com/lives/milwaukee-brewers-at-baltimore-orioles-home' >> /home/billy/cronlog.txt 2>&1

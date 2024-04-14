@@ -36,7 +36,7 @@ def make_urls(teams):
 
 def make_open_commands(urls, mode):
     if mode == 'fullscreen':
-        return ['python selenium_mode.py ' + url for url in urls]
+        return ['/home/billy/working/autowatch/selenium_mode.py ' + url + ' >> /home/billy/cronlog.txt 2>&1' for url in urls]
 
     elif mode == 'no-fullscreen':
         return ['export DISPLAY=:0 && firefox --new-window ' + url for url in urls]
@@ -129,10 +129,21 @@ def fix_day_rollover(cron_times):
         adjusted_cron_times.append(f"{minute} {hour} {day} {month} *")
     return adjusted_cron_times
 
+def make_crontab(all_cronjobs):
+    display = 'DISPLAY=:0'
+    shell = 'SHELL=/bin/bash'
+    path = 'PATH=:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin'
+
+    env = [display, shell, path, ' ']
+
+    crontab = env + all_cronjobs
+    
+    return crontab
+
 times, teams = extract_date_time_teams(sys.argv[1])
-volo_urls = make_urls(teams)
+urls = make_urls(teams)
 #onestream_urls = find_streams_in_urls(volo_urls)
-open_commands = make_open_commands(volo_urls, 'fullscreen')
+open_commands = make_open_commands(urls, 'fullscreen')
 et_start_times = make_crontimes(times)
 ct_start_times = modify_hour(et_start_times, 'subtract', 1)
 ct_end_times = modify_hour(ct_start_times, 'add', 4)
@@ -140,5 +151,6 @@ fixed_ct_end_times = fix_day_rollover(ct_end_times)
 open_cronjobs = make_cronjobs(ct_start_times, open_commands)
 close_cronjobs = make_cronjobs(fixed_ct_end_times, 'close')
 all_cronjobs = [value for pair in zip(open_cronjobs, close_cronjobs) for value in pair]
-write_list_to_file(sys.argv[2], all_cronjobs)
+full_crontab = make_crontab(all_cronjobs)
+write_list_to_file(sys.argv[2], full_crontab)
 
